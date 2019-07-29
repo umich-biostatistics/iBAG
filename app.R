@@ -104,21 +104,21 @@ linearUI <- function(id, label = "linear") {
             tabItem(tabName = ns("idata"),
                     fluidRow(
                         box(title = "Input multi-platform Genomics Data", status = "primary", solidHeader = TRUE, width=6,
-                            checkboxInput("cn", label = "Copy Number"),
+                            checkboxInput(ns("cn"), label = "Copy Number"),
                             conditionalPanel(
                                 condition = "input.cn==true",
-                                fileInput('cnfile', 'Input Copy Number Data File')
+                                fileInput(ns('cnfile'), 'Input Copy Number Data File')
                             ),
                             
-                            checkboxInput("meth", label = "DNA Methylation"),
+                            checkboxInput(ns("meth"), label = "DNA Methylation"),
                             conditionalPanel(
                                 condition = "input.meth==true",
-                                fileInput('methfile', 'Input DNA Methylation Data File')
+                                fileInput(ns('methfile'), 'Input DNA Methylation Data File')
                             ),
-                            checkboxInput("mrna", label = "MRNA Expression"),
+                            checkboxInput(ns("mrna"), label = "MRNA Expression"),
                             conditionalPanel(
                                 condition = "input.mrna==true",
-                                fileInput('mrnafile', 'Input mRNA Expression Data File')
+                                fileInput(ns('mrnafile'), 'Input mRNA Expression Data File')
                             )),
                         
                         box(title = "Input Clinical Response Data", status = "primary", solidHeader = TRUE, width=6,
@@ -127,10 +127,10 @@ linearUI <- function(id, label = "linear") {
                                                        "Survival (Uncensored)" = 3),selected=0),
                             conditionalPanel(
                                 condition = "input.rdata>0",
-                                fileInput('rfile', paste("Input clinical data file"))
+                                fileInput(ns('rfile'), paste("Input clinical data file"))
                             ))),
                     
-                    sliderInput("mruns", "Number of MCMC Runs (Burn in is 5% of runs) (Calibrate the number of runs according to the computer it is being run on) :",
+                    sliderInput(ns("mruns"), "Number of MCMC Runs (Burn in is 5% of runs) (Calibrate the number of runs according to the computer it is being run on) :",
                                 min = 10, max = 10000, value = 10, step= 100),
                     
                     fluidRow(
@@ -147,7 +147,7 @@ linearUI <- function(id, label = "linear") {
             ),
             
             tabItem(tabName = ns("rdata"),
-                    sliderInput("delta", "Delta:",
+                    sliderInput(ns("delta"), "Delta:",
                                 min = 0, max = 1, value = 0.05, step= 0.01),
                     plotOutput("plot1"),
                     plotOutput("plot2")
@@ -166,8 +166,8 @@ linearUI <- function(id, label = "linear") {
                         uiOutput("col"),
                         box(title = "Mechanistic Model Gene Summary",width=12, background = "black",
                             tableOutput("table3")),
-                        selectInput("palette", "Choose Color Theme", c("YlOrRd", "RdYlBu", "Greens", "Blues")),
-                        d3heatmapOutput("heatmap",      width="90%",  height="1000px")
+                        selectInput(ns("palette"), "Choose Color Theme", c("YlOrRd", "RdYlBu", "Greens", "Blues")),
+                        d3heatmapOutput(ns("heatmap"),      width="90%",  height="1000px")
                     )
             )
         )
@@ -507,21 +507,21 @@ nonlinearUI <- function(id, label = "nonlinear") {
             tabItem(tabName = ns("idata"),
                     fluidRow(
                         box(title = "Input multi-platform Genomics Data", status = "primary", solidHeader = TRUE, width=6,
-                            checkboxInput("cn", label = "Copy Number"),
+                            checkboxInput(ns("cn"), label = "Copy Number"),
                             conditionalPanel(
                                 condition = "input.cn==true",
-                                fileInput('cnfile', 'Input Copy Number Data File')
+                                fileInput(ns('cnfile'), 'Input Copy Number Data File')
                             ),
                             
-                            checkboxInput("meth", label = "DNA Methylation"),
+                            checkboxInput(ns("meth"), label = "DNA Methylation"),
                             conditionalPanel(
                                 condition = "input.meth==true",
-                                fileInput('methfile', 'Input DNA Methylation Data File')
+                                fileInput(ns('methfile'), 'Input DNA Methylation Data File')
                             ),
-                            checkboxInput("mrna", label = "MRNA Expression"),
+                            checkboxInput(ns("mrna"), label = "MRNA Expression"),
                             conditionalPanel(
                                 condition = "input.mrna==true",
-                                fileInput('mrnafile', 'Input mRNA Expression Data File')
+                                fileInput(ns('mrnafile'), 'Input mRNA Expression Data File')
                             )),
                         
                         box(title = "Input Clinical Response Data", status = "primary", solidHeader = TRUE, width=6,
@@ -530,10 +530,10 @@ nonlinearUI <- function(id, label = "nonlinear") {
                                                        "Survival (Uncensored)" = 3),selected=0),
                             conditionalPanel(
                                 condition = "input.rdata>0",
-                                fileInput('rfile', paste("Input clinical data file"))
+                                fileInput(ns('rfile'), paste("Input clinical data file"))
                             ))),
                     
-                    sliderInput("mruns", "Number of MCMC Runs (Burn in is 5% of runs) (Calibrate the number of runs according to the computer it is being run on) :",
+                    sliderInput(ns("mruns"), "Number of MCMC Runs (Burn in is 5% of runs) (Calibrate the number of runs according to the computer it is being run on) :",
                                 min = 10, max = 10000, value = 10, step= 100),
                     
                     fluidRow(
@@ -551,7 +551,7 @@ nonlinearUI <- function(id, label = "nonlinear") {
             ),
             
             tabItem(tabName = ns("rdata"),
-                    sliderInput("delta", "Delta:",
+                    sliderInput(ns("delta"), "Delta:",
                                 min = 0, max = 0.5, value = 0.01, step= 0.001),
                     plotOutput("plot1"),
                     plotOutput("plot2")
@@ -571,8 +571,8 @@ nonlinearUI <- function(id, label = "nonlinear") {
                         box(title = "Mechanistic Model Gene Summary",width=12, background = "black",
                             actionButton("goButton3", "Go!",icon = icon("play"),style="success"),
                             tableOutput("table3")),
-                        selectInput("palette", "Choose Color Theme", c("YlOrRd", "RdYlBu", "Greens", "Blues")),
-                        d3heatmapOutput("heatmap",      width="90%",  height="1000px")
+                        selectInput(ns("palette"), "Choose Color Theme", c("YlOrRd", "RdYlBu", "Greens", "Blues")),
+                        d3heatmapOutput(ns("heatmap"),      width="90%",  height="1000px")
                     )
             )
         )
