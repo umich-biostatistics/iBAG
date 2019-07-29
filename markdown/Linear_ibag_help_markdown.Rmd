@@ -1,0 +1,10 @@
+
+##  Linear iBAG
+
+#### Hierarchical integration models according to theoretical or structural relationships among different platforms.
+
+#### View the source code for linear iBAG at:
+> + [`Linear iBAG`](https://github.com/umich-biostatistics): insert description
+
+#### This is the modeling strategy of iBAG:
+
