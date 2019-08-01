@@ -241,11 +241,11 @@ linearServer <- function(input, output, session) {
 
 
     observeEvent(input$goButton, {
-        newtab <- switch(input$tabs,
-                         "idata" = "rdata",
-                         "rdata" = "idata"
-        )
-        updateTabItems(session, ns("tabs"), newtab)
+        # newtab <- switch(input$tabs,
+        #                  "idata" = "rdata",
+        #                  "rdata" = "idata"
+        # )
+        #updateTabItems(session = parent_session, ns("tabs"), newtab)
     }
 
     )
@@ -255,7 +255,7 @@ linearServer <- function(input, output, session) {
                          "iintro" = "idata",
                          "idata" = "iintro"
         )
-        updateTabItems(session, ns("tabs"), newtab)
+        updateTabItems(session, "tabs", newtab)
     }
 
     )
