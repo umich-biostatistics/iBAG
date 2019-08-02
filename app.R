@@ -968,6 +968,52 @@ nonlinearServer <- function(input, output, session) {
 }
 
 
+
+radioUI <- function(id, label = "radio") {
+    ns <- NS(id)
+    
+    header_radio <- dashboardHeader(
+        title = "Radio iBAG" #, 
+        # titleWidth = 700
+    )
+    
+    sidebar_radio <- dashboardSidebar(
+        width = 200,
+        sidebarMenu(
+            id="tabs",
+            menuItem("Introduction", tabName = "iintro", icon = icon("upload", lib = "glyphicon")),
+            menuItem("Data Input", tabName = "idata", icon = icon("upload", lib = "glyphicon")),
+            menuItem("Mechanistic Model Fits", tabName = "mcodata", icon = icon("stats", lib = "glyphicon")),
+            menuItem("Posterior Probability Plots", tabName = "rdata", icon = icon("stats", lib = "glyphicon")),
+            menuItem("Gene Tables", tabName = "gdata", icon = icon("th", lib = "glyphicon"))
+        )
+    )
+    
+    body_radio <- dashboardBody(
+        #h2("Hello, World!")
+        tabItems(
+            
+            tabItem(tabName = "iintro",
+                    
+                    fluidRow(img(src='ibag.png',align="left"),
+                             
+                             p("iBAG is short for integrative Bayesian analysis of high-dimensional multiplatform genomics data. iBAG is a general framework for integrating information across genomic, transcriptomic and epigenetic data. Briefly, iBAG uses a novel hierarchical procedure by breaking the modeling into two parts, a mechanistic component that clarifies the molecular behaviors, mechanisms and relationships between and within the different types of molecular platforms. Subsequently, a clinical component that utilizes this information to assess associations between the phenotypes and clinical outcomes that characterize cancer development and progression (e.g. survival times, treatment arms, response to chemotherapy and tumor [sub]-types). The  Figure shows a schematic representation of the iBAG modeling strategy. The statistical formulation of the iBAG models can be found",a('here', href='http://www.ncbi.nlm.nih.gov/pubmed/23142963'),"and", a('here', href='http://www.ncbi.nlm.nih.gov/pubmed/24053265'),". A standalone version of this code along with an example dataset is available at" , a('here', href='http://odin.mdacc.tmc.edu/~vbaladan/Veera_Home_Page/iBAG.zip'),"."),
+                             box(title = "Input Data", status = "primary",width = 4, background = "black", "If you understand the data format to input for the app click the button to proceed", actionButton("inButton", "Input data for iBAG",icon = icon("play"),style="success"))
+                             
+                    )
+            ))
+    )
+    
+    dashboardPage(skin = "blue", header_radio, sidebar_radio, body_radio)
+    
+}
+
+radioServer <- function(input, output, session) {
+    
+}
+
+
+
 # Define UI for application that draws a histogram
 ui <- dashboardPage(
     # Header of the page
@@ -990,6 +1036,8 @@ ui <- dashboardPage(
             menuItem("Linear iBag", icon = icon("th"), tabName = "input-linear",
                      badgeLabel = "new", badgeColor = "green"),
             menuItem("Non-linear iBag", icon = icon("th"), tabName = "input-nonlinear",
+                     badgeLabel = "new", badgeColor = "green"),
+            menuItem("Radio iBag", icon = icon("th"), tabName = "input-radio",
                      badgeLabel = "new", badgeColor = "green")
         )
 
@@ -1004,16 +1052,20 @@ ui <- dashboardPage(
             # Introduction tab content to be displayed The contents introduction_page is stored
             # in a separate file so this page does not get cluttered                             # introduction_page
             tabItem(tabName = "intro",
-                    introduction_page
+                introduction_page
             ),
             
             # Linear iBAG tab -------------------------------------------------
             tabItem(tabName = "input-linear",
                 linearUI("linear1", "linear 1")
             ),
-            # 
+            # Non-linear inear iBAG tab -------------------------------------------------
             tabItem(tabName = "input-nonlinear",
-                    nonlinearUI("nonlinear1", "nonlinear 1")
+                nonlinearUI("nonlinear1", "nonlinear 1")
+            ),
+            # Radio iBAG tab -------------------------------------------------
+            tabItem(tabName = "input-radio",
+                radioUI("radio1", "radio 1")
             )
             
             
@@ -1024,14 +1076,16 @@ ui <- dashboardPage(
 )
 
 
-#ui <- linearUI("linear", "linear1")
 
 
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
-    #
-    callModule(nonlinearServer, "nonlinear1")
+    
+    # Call modules (each sub-application)
     callModule(linearServer, "linear1")
+    callModule(nonlinearServer, "nonlinear1")
+    callModule(radioServer, "radio1")
+    
 }
 
 # Run the application 
