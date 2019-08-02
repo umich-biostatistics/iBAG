@@ -40,7 +40,7 @@ linearUI <- function(id, label = "linear") {
     sidebar_linear <- dashboardSidebar(
         width = 200,
         sidebarMenu(
-            id="tabs",
+            id=ns("tabs"),
             menuItem("Introduction", tabName = ns("iintro"), icon = icon("upload", lib = "glyphicon")),
             menuItem("Data Input", tabName = ns("idata"), icon = icon("upload", lib = "glyphicon")),
             menuItem("Posterior Probability Plots", tabName = ns("rdata"), icon = icon("stats", lib = "glyphicon")),
@@ -65,23 +65,41 @@ linearUI <- function(id, label = "linear") {
                     
                     fluidRow(img(src='ibag.png',align="left"),
                              
-                             p("iBAG is short for integrative Bayesian analysis of high-dimensional multiplatform genomics data. iBAG is a general framework for integrating information across genomic, transcriptomic and epigenetic data. Briefly, iBAG uses a novel hierarchical procedure by breaking the modeling into two parts, a mechanistic component that clarifies the molecular behaviors, mechanisms and relationships between and within the different types of molecular platforms. Subsequently, a clinical component that utilizes this information to assess associations between the phenotypes and clinical outcomes that characterize cancer development and progression (e.g. survival times, treatment arms, response to chemotherapy and tumor [sub]-types). The  Figure shows a schematic representation of the iBAG modeling strategy. The statistical formulation of the iBAG models can be found",a('here', href='http://www.ncbi.nlm.nih.gov/pubmed/23142963'),"and", a('here', href='http://www.ncbi.nlm.nih.gov/pubmed/24053265'),". A standalone version of this code along with an example dataset is available at" , a('here', href='http://odin.mdacc.tmc.edu/~vbaladan/Veera_Home_Page/iBAG.zip'),"."),
-                             box(title = "Input Data", status = "primary",width = 4, background = "black", "If you understand the data format to input for the app click the button to proceed", actionButton("inButton", "Input data for iBAG",icon = icon("play"),style="success"))
+                             p("iBAG is short for integrative Bayesian analysis of high-dimensional multiplatform genomics data. 
+                               iBAG is a general framework for integrating information across genomic, transcriptomic and epigenetic 
+                               data. Briefly, iBAG uses a novel hierarchical procedure by breaking the modeling into two parts, a 
+                               mechanistic component that clarifies the molecular behaviors, mechanisms and relationships between 
+                               and within the different types of molecular platforms. Subsequently, a clinical component that utilizes 
+                               this information to assess associations between the phenotypes and clinical outcomes that characterize 
+                               cancer development and progression (e.g. survival times, treatment arms, response to chemotherapy and tumor 
+                               [sub]-types). The  Figure shows a schematic representation of the iBAG modeling strategy. The statistical 
+                               formulation of the iBAG models can be found",a('here', href='http://www.ncbi.nlm.nih.gov/pubmed/23142963'),
+                               "and", a('here', href='http://www.ncbi.nlm.nih.gov/pubmed/24053265'),". 
+                               A standalone version of this code along with an example dataset is available at" , 
+                               a('here', href='http://odin.mdacc.tmc.edu/~vbaladan/Veera_Home_Page/iBAG.zip'),"."),
+                             
+                             box(title = "Input Data", status = "primary",width = 4, background = "black", 
+                                 "If you understand the data format to input for the app click the button to proceed", 
+                                 actionButton(ns("inButton"), "Input data for iBAG",icon = icon("play"),style="success"))
                              
                     ),
                     fluidRow(
                         
-                        
-                        
-                        box(title = "This app requires the following data in the format described below", status = "primary",width = 12, background = "black",
+                        box(title = "This app requires the following data in the format 
+                            described below", status = "primary",width = 12, background = "black",
                             
-                            fluidRow( box(title = "Input format for clinical data", status = "primary",width = 4, background = "black",p("The rows should represent the individuals and the  2 columns should be the individual Id and the response (Binary, Continuous, Survival)."), img(src='sdata.png') ),
+                            fluidRow( box(title = "Input format for clinical data", status = "primary",width = 4, background = "black",
+                                          p("The rows should represent the individuals and the  2 columns should be the 
+                                            individual Id and the response (Binary, Continuous, Survival)."), img(src='sdata.png') ),
                                       
-                                      fluidRow(   box(title = "Input format for mRNA data", status = "primary",width = 7, background = "black", p("The rows should be individuals and the columns should be the genes."), img(src='mrnadata.png') ),
+                                      fluidRow(   box(title = "Input format for mRNA data", status = "primary",width = 7, background = "black", 
+                                                      p("The rows should be individuals and the columns should be the genes."), img(src='mrnadata.png') ),
                                                   
                                                   
                                                   
-                                                  box(title = "Input format for genomic data(Methylation/CNA)", status = "primary",width = 7, background = "black", p("The rows should be individuals and the columns should be markers. Each marker name should include the name of the gene it is present in."), img(src='gdata.png') )
+                                                  box(title = "Input format for genomic data(Methylation/CNA)", status = "primary",width = 7, background = "black", 
+                                                      p("The rows should be individuals and the columns should be markers. Each marker 
+                                                        name should include the name of the gene it is present in."), img(src='gdata.png') )
                                                   
                                                   
                                       )
@@ -104,21 +122,21 @@ linearUI <- function(id, label = "linear") {
             tabItem(tabName = ns("idata"),
                     fluidRow(
                         box(title = "Input multi-platform Genomics Data", status = "primary", solidHeader = TRUE, width=6,
-                            checkboxInput("cn", label = "Copy Number"),
+                            checkboxInput(ns("cn"), label = "Copy Number"),
                             conditionalPanel(
-                                condition = "input.cn==true",
-                                fileInput('cnfile', 'Input Copy Number Data File')
+                                condition = paste0("input.",ns("cn"),"==true"), # "input.cn==true"
+                                fileInput(ns('cnfile'), 'Input Copy Number Data File')
                             ),
                             
-                            checkboxInput("meth", label = "DNA Methylation"),
+                            checkboxInput(ns("meth"), label = "DNA Methylation"),
                             conditionalPanel(
-                                condition = "input.meth==true",
-                                fileInput('methfile', 'Input DNA Methylation Data File')
+                                condition = paste0("input.",ns("meth"),"==true"), # "input.meth==true"
+                                fileInput(ns('methfile'), 'Input DNA Methylation Data File')
                             ),
-                            checkboxInput("mrna", label = "MRNA Expression"),
+                            checkboxInput(ns("mrna"), label = "MRNA Expression"),
                             conditionalPanel(
-                                condition = "input.mrna==true",
-                                fileInput('mrnafile', 'Input mRNA Expression Data File')
+                                condition = paste0("input.",ns("mrna"),"==true"), # "input.mrna==true"
+                                fileInput(ns('mrnafile'), 'Input mRNA Expression Data File')
                             )),
                         
                         box(title = "Input Clinical Response Data", status = "primary", solidHeader = TRUE, width=6,
@@ -126,19 +144,22 @@ linearUI <- function(id, label = "linear") {
                                         choices = list("None"=0,"Continuous" = 2,
                                                        "Survival (Uncensored)" = 3),selected=0),
                             conditionalPanel(
-                                condition = "input.rdata>0",
-                                fileInput('rfile', paste("Input clinical data file"))
+                                condition = paste0("input.",ns("rdata"),">0"), # "input.rdata>0"
+                                fileInput(ns('rfile'), paste("Input clinical data file"))
                             ))),
                     
-                    sliderInput("mruns", "Number of MCMC Runs (Burn in is 5% of runs) (Calibrate the number of runs according to the computer it is being run on) :",
+                    sliderInput(ns("mruns"), "Number of MCMC Runs (Burn in is 5% of runs) 
+                                (Calibrate the number of runs according to the computer it is being run on) :",
                                 min = 10, max = 10000, value = 10, step= 100),
                     
                     fluidRow(
                         box(title = "Input Data summary", status = "primary",width = 4, background = "black",
-                            tableOutput('mytable')),
+                            tableOutput(ns('mytable'))),
                         
                         
-                        box(title = "Run Analysis", status = "primary",width = 4, background = "black", "If you conform with the input data summary press the button to run the analysis", actionButton("goButton", "Run iBAG!",icon = icon("play"),style="success"))
+                        box(title = "Run Analysis", status = "primary",width = 4, background = "black", 
+                            "If you conform with the input data summary press the button to run the analysis", 
+                            actionButton(ns("goButton"), "Run iBAG!",icon = icon("play"),style="success"))
                     )
                     
                     
@@ -147,27 +168,27 @@ linearUI <- function(id, label = "linear") {
             ),
             
             tabItem(tabName = ns("rdata"),
-                    sliderInput("delta", "Delta:",
+                    sliderInput(ns("delta"), "Delta:",
                                 min = 0, max = 1, value = 0.05, step= 0.01),
-                    plotOutput("plot1"),
-                    plotOutput("plot2")
+                    plotOutput(ns("plot1")),
+                    plotOutput(ns("plot2"))
             ),
             tabItem(tabName = ns("gdata"),
                     fluidRow(
                         box(title = "Gene Summary for positive effect on outcome", background = "black",
-                            tableOutput("table1")),
+                            tableOutput(ns("table1"))),
                         box(title = "Gene Summary for negative effect on outcome", background = "black",
-                            tableOutput("table2"))
+                            tableOutput(ns("table2")))
                     )
             ),
             
             tabItem(tabName = ns("mcodata"),
                     fluidRow(
-                        uiOutput("col"),
+                        uiOutput(ns("col")),
                         box(title = "Mechanistic Model Gene Summary",width=12, background = "black",
-                            tableOutput("table3")),
-                        selectInput("palette", "Choose Color Theme", c("YlOrRd", "RdYlBu", "Greens", "Blues")),
-                        d3heatmapOutput("heatmap",      width="90%",  height="1000px")
+                            tableOutput(ns("table3"))),
+                        selectInput(ns("palette"), "Choose Color Theme", c("YlOrRd", "RdYlBu", "Greens", "Blues")),
+                        d3heatmapOutput(ns("heatmap"),      width="90%",  height="1000px")
                     )
             )
         )
@@ -186,8 +207,6 @@ linearUI <- function(id, label = "linear") {
 linearServer <- function(input, output, session) {
     df<-eventReactive(input$goButton, {
 
-
-
         withProgress(message = 'Fitting Mechanistic Model', value = 1/10, {
             nruns<-input$mruns
             GBM_data <- mechmodel(methdata()$data,mrnadata()$data,cndata()$data,rdata()$data)
@@ -197,7 +216,10 @@ linearServer <- function(input, output, session) {
             initial <- get_starting_values_NG(S=nruns, p=to_gibbs$p, k=to_gibbs$k, n=to_gibbs$n, X=to_gibbs$X, Y=to_gibbs$Y,names_to_keep = to_gibbs$names_to_keep)
             incProgress(1/10, detail = paste("Running MCMC"))
             M <- mean(coef(lm(to_gibbs$Y~to_gibbs$X - 1))^2)	#b_tilde=M per Griffin & Brown (2009)
-            final <- MC_samples_NG_no_sig_sq_in_beta_prior(PARAM=initial$PARAM, X=to_gibbs$X, Y=to_gibbs$Y, p=to_gibbs$p, k=to_gibbs$k, n=to_gibbs$n,a=0.001, b=0.001, c=1, a_tilde=2, b_tilde=M, tune=0.6, beta_names=initial$beta_names,gam_n2_names=initial$gam_n2_names, lam_names=initial$lam_names, psi_names=initial$psi_names)
+            final <- MC_samples_NG_no_sig_sq_in_beta_prior(PARAM=initial$PARAM, X=to_gibbs$X, Y=to_gibbs$Y, p=to_gibbs$p, 
+                                                           k=to_gibbs$k, n=to_gibbs$n,a=0.001, b=0.001, c=1, a_tilde=2, b_tilde=M, 
+                                                           tune=0.6, beta_names=initial$beta_names,gam_n2_names=initial$gam_n2_names, 
+                                                           lam_names=initial$lam_names, psi_names=initial$psi_names)
 
             burn_in <- floor(0.05*nruns)+1
             post_means <- apply(final$PARAM[(burn_in+1):nrow(final$PARAM),],2,mean)
@@ -219,11 +241,11 @@ linearServer <- function(input, output, session) {
 
 
     observeEvent(input$goButton, {
-        newtab <- switch(input$tabs,
-                         "idata" = "rdata",
-                         "rdata" = "idata"
-        )
-        updateTabItems(session, "tabs", newtab)
+        # newtab <- switch(input$tabs,
+        #                  "idata" = "rdata",
+        #                  "rdata" = "idata"
+        # )
+        #updateTabItems(session = parent_session, ns("tabs"), newtab)
     }
 
     )
@@ -302,12 +324,16 @@ linearServer <- function(input, output, session) {
         colnames(v2)<-c("Methylation","Copy Number", "Other")
 
         aa<-data.frame(x=1:length(initial$beta_names),y=pos[oo],g=c(rep(1,to_gibbs$p[1]),rep(2,to_gibbs$p[2]),rep(3,to_gibbs$p[3]))[oo])
-        p1<-ggplot()+geom_bar(aes(x=x,y=y,fill = as.factor(g)), position = "dodge", stat="identity",data=aa)+scale_fill_discrete(labels=c("Methylation","Copy Number","Other"))+scale_x_continuous(breaks=c(seq(1,144,by=3)), labels=c(colnames(GBM_data$OurMRNA))  )+theme(axis.text.x = element_text(angle=90))+geom_hline(aes(yintercept=0.5))+theme(legend.title=element_blank())+ylab("Pr(beta > log(1+delta))")+ggtitle("Posterior Probabilities (Positive)")+xlab("Genes")
+        p1<-ggplot()+geom_bar(aes(x=x,y=y,fill = as.factor(g)), position = "dodge", stat="identity",data=aa)+scale_fill_discrete(labels=c("Methylation","Copy Number","Other"))+
+            scale_x_continuous(breaks=c(seq(1,144,by=3)), labels=c(colnames(GBM_data$OurMRNA))  )+theme(axis.text.x = element_text(angle=90))+geom_hline(aes(yintercept=0.5))+
+            theme(legend.title=element_blank())+ylab("Pr(beta > log(1+delta))")+ggtitle("Posterior Probabilities (Positive)")+xlab("Genes")
 
 
 
         aa<-data.frame(x=1:length(initial$beta_names),y=neg[oo],g=c(rep(1,to_gibbs$p[1]),rep(2,to_gibbs$p[2]),rep(3,to_gibbs$p[3]))[oo])
-        p2<-ggplot()+geom_bar(aes(x=x,y=y,fill = as.factor(g)), position = "dodge", stat="identity",data=aa)+scale_fill_discrete(labels=c("Methylation","Copy Number","Other"))+scale_x_continuous(breaks=c(seq(1,144,by=3)), labels=c(colnames(GBM_data$OurMRNA))  )+theme(axis.text.x = element_text(angle=90))+geom_hline(aes(yintercept=0.5))+theme(legend.title=element_blank())+ylab("Pr(beta > log(1-delta))")+ggtitle("Posterior Probabilities (Negative)")+xlab("Genes")
+        p2<-ggplot()+geom_bar(aes(x=x,y=y,fill = as.factor(g)), position = "dodge", stat="identity",data=aa)+scale_fill_discrete(labels=c("Methylation","Copy Number","Other"))+
+            scale_x_continuous(breaks=c(seq(1,144,by=3)), labels=c(colnames(GBM_data$OurMRNA))  )+theme(axis.text.x = element_text(angle=90))+geom_hline(aes(yintercept=0.5))+
+            theme(legend.title=element_blank())+ylab("Pr(beta > log(1-delta))")+ggtitle("Posterior Probabilities (Negative)")+xlab("Genes")
 
         return(list(p1=p1,p2=p2,t1=v1,t2=v2))
     })
@@ -442,7 +468,7 @@ nonlinearUI <- function(id, label = "nonlinear") {
     sidebar_nonlinear <- dashboardSidebar(
         width = 200,
         sidebarMenu(
-            id="tabs",
+            id=ns("tabs"),
             menuItem("Introduction", tabName = ns("iintro"), icon = icon("upload", lib = "glyphicon")),
             menuItem("Data Input", tabName = ns("idata"), icon = icon("upload", lib = "glyphicon")),
             menuItem("Mechanistic Model Fits", tabName = ns("mcodata"), icon = icon("stats", lib = "glyphicon")),
@@ -468,23 +494,40 @@ nonlinearUI <- function(id, label = "nonlinear") {
                     
                     fluidRow(img(src='ibag.png',align="left"),
                              
-                             p("iBAG is short for integrative Bayesian analysis of high-dimensional multiplatform genomics data. iBAG is a general framework for integrating information across genomic, transcriptomic and epigenetic data. Briefly, iBAG uses a novel hierarchical procedure by breaking the modeling into two parts, a mechanistic component that clarifies the molecular behaviors, mechanisms and relationships between and within the different types of molecular platforms. Subsequently, a clinical component that utilizes this information to assess associations between the phenotypes and clinical outcomes that characterize cancer development and progression (e.g. survival times, treatment arms, response to chemotherapy and tumor [sub]-types). The  Figure shows a schematic representation of the iBAG modeling strategy. The statistical formulation of the iBAG models can be found",a('here', href='http://www.ncbi.nlm.nih.gov/pubmed/23142963'),"and", a('here', href='http://www.ncbi.nlm.nih.gov/pubmed/24053265'),". A standalone version of this code along with an example dataset is available at" , a('here', href='http://odin.mdacc.tmc.edu/~vbaladan/Veera_Home_Page/iBAG.zip'),"."),
-                             box(title = "Input Data", status = "primary",width = 4, background = "black", "If you understand the data format to input for the app click the button to proceed", actionButton("inButton", "Input data for iBAG",icon = icon("play"),style="success"))
+                             p("iBAG is short for integrative Bayesian analysis of high-dimensional multiplatform genomics data. iBAG is a general 
+                               framework for integrating information across genomic, transcriptomic and epigenetic data. Briefly, iBAG uses a novel 
+                               hierarchical procedure by breaking the modeling into two parts, a mechanistic component that clarifies the molecular 
+                               behaviors, mechanisms and relationships between and within the different types of molecular platforms. Subsequently, 
+                               a clinical component that utilizes this information to assess associations between the phenotypes and clinical outcomes 
+                               that characterize cancer development and progression (e.g. survival times, treatment arms, response to chemotherapy and 
+                               tumor [sub]-types). The  Figure shows a schematic representation of the iBAG modeling strategy. The statistical formulation 
+                               of the iBAG models can be found",a('here', href='http://www.ncbi.nlm.nih.gov/pubmed/23142963'),"and", 
+                               a('here', href='http://www.ncbi.nlm.nih.gov/pubmed/24053265'),". A standalone version of this code along with an example dataset is available at" , 
+                               a('here', href='http://odin.mdacc.tmc.edu/~vbaladan/Veera_Home_Page/iBAG.zip'),"."),
+                             box(title = "Input Data", status = "primary",width = 4, background = "black", 
+                                 "If you understand the data format to input for the app click the button to proceed", 
+                                 actionButton(ns("inButton"), "Input data for iBAG",icon = icon("play"),style="success"))
                              
                     ),
                     fluidRow(
                         
                         
                         
-                        box(title = "This app requires the following data in the format described below", status = "primary",width = 12, background = "black",
+                        box(title = "This app requires the following data in the format described below", 
+                            status = "primary",width = 12, background = "black",
                             
-                            fluidRow( box(title = "Input format for clinical data", status = "primary",width = 4, background = "black",p("The rows should represent the individuals and the  2 columns should be the individual Id and the response (Binary, Continuous, Survival)."), img(src='sdata.png') ),
+                            fluidRow( box(title = "Input format for clinical data", status = "primary",width = 4, 
+                                          background = "black",p("The rows should represent the individuals and the  2 columns should be the individual 
+                                                                 Id and the response (Binary, Continuous, Survival)."), img(src='sdata.png') ),
                                       
-                                      fluidRow(   box(title = "Input format for mRNA data", status = "primary",width = 7, background = "black", p("The rows should be individuals and the columns should be the genes."), img(src='mrnadata.png') ),
+                                      fluidRow(   box(title = "Input format for mRNA data", status = "primary",width = 7, 
+                                                      background = "black", p("The rows should be individuals and the columns should be the genes."), img(src='mrnadata.png') ),
                                                   
                                                   
                                                   
-                                                  box(title = "Input format for genomic data(Methylation/CNA)", status = "primary",width = 7, background = "black", p("The rows should be individuals and the columns should be markers. Each marker name should include the name of the gene it is present in."), img(src='gdata.png') )
+                                                  box(title = "Input format for genomic data(Methylation/CNA)", status = "primary",width = 7, background = "black", 
+                                                      p("The rows should be individuals and the columns should be markers. Each marker name should include the name 
+                                                        of the gene it is present in."), img(src='gdata.png') )
                                                   
                                                   
                                       )
@@ -507,21 +550,21 @@ nonlinearUI <- function(id, label = "nonlinear") {
             tabItem(tabName = ns("idata"),
                     fluidRow(
                         box(title = "Input multi-platform Genomics Data", status = "primary", solidHeader = TRUE, width=6,
-                            checkboxInput("cn", label = "Copy Number"),
+                            checkboxInput(ns("cn"), label = "Copy Number"),
                             conditionalPanel(
-                                condition = "input.cn==true",
-                                fileInput('cnfile', 'Input Copy Number Data File')
+                                condition = paste0("input.",ns("cn"),"==true"), # "input.cn==true"
+                                fileInput(ns('cnfile'), 'Input Copy Number Data File')
                             ),
                             
-                            checkboxInput("meth", label = "DNA Methylation"),
+                            checkboxInput(ns("meth"), label = "DNA Methylation"),
                             conditionalPanel(
-                                condition = "input.meth==true",
-                                fileInput('methfile', 'Input DNA Methylation Data File')
+                                condition = paste0("input.",ns("meth"),"==true"), # "input.meth==true"
+                                fileInput(ns('methfile'), 'Input DNA Methylation Data File')
                             ),
-                            checkboxInput("mrna", label = "MRNA Expression"),
+                            checkboxInput(ns("mrna"), label = "MRNA Expression"),
                             conditionalPanel(
-                                condition = "input.mrna==true",
-                                fileInput('mrnafile', 'Input mRNA Expression Data File')
+                                condition = paste0("input.",ns("mrna"),"==true"), # "input.mrna==true"
+                                fileInput(ns('mrnafile'), 'Input mRNA Expression Data File')
                             )),
                         
                         box(title = "Input Clinical Response Data", status = "primary", solidHeader = TRUE, width=6,
@@ -529,19 +572,21 @@ nonlinearUI <- function(id, label = "nonlinear") {
                                         choices = list("None"=0,"Continuous" = 2,
                                                        "Survival (Uncensored)" = 3),selected=0),
                             conditionalPanel(
-                                condition = "input.rdata>0",
-                                fileInput('rfile', paste("Input clinical data file"))
+                                condition = paste0("input.",ns("rdata"),">0"), # "input.rdata>0"
+                                fileInput(ns('rfile'), paste("Input clinical data file"))
                             ))),
                     
-                    sliderInput("mruns", "Number of MCMC Runs (Burn in is 5% of runs) (Calibrate the number of runs according to the computer it is being run on) :",
+                    sliderInput(ns("mruns"), "Number of MCMC Runs (Burn in is 5% of runs) (Calibrate the number of runs according to the computer it is being run on) :",
                                 min = 10, max = 10000, value = 10, step= 100),
                     
                     fluidRow(
                         box(title = "Input Data summary", status = "primary",width = 4, background = "black",
-                            tableOutput('mytable')),
+                            tableOutput(ns('mytable'))),
                         
                         
-                        box(title = "Run Analysis", status = "primary",width = 4, background = "black", "If you conform with the input data summary press the button to run the analysis", actionButton("goButton1", "Run linear iBAG!",icon = icon("play"),style="success"), actionButton("goButton2", "Run bart iBAG!",icon = icon("play"),style="success")),
+                        box(title = "Run Analysis", status = "primary",width = 4, background = "black", "If you conform with the input data summary press the button to run the analysis", 
+                            actionButton(ns("goButton1"), "Run linear iBAG!",icon = icon("play"),style="success"), 
+                            actionButton(ns("goButton2"), "Run bart iBAG!",icon = icon("play"),style="success")),
                         box(title="R square:", status = "primary",width = 4, background = "black",textOutput("rsq"))
                     )
                     
@@ -551,28 +596,28 @@ nonlinearUI <- function(id, label = "nonlinear") {
             ),
             
             tabItem(tabName = ns("rdata"),
-                    sliderInput("delta", "Delta:",
+                    sliderInput(ns("delta"), "Delta:",
                                 min = 0, max = 0.5, value = 0.01, step= 0.001),
-                    plotOutput("plot1"),
-                    plotOutput("plot2")
+                    plotOutput(ns("plot1")),
+                    plotOutput(ns("plot2"))
             ),
             tabItem(tabName = ns("gdata"),
                     fluidRow(
                         box(title = "Gene Summary for positive effect on outcome", background = "black",
-                            tableOutput("table1")),
+                            tableOutput(ns("table1"))),
                         box(title = "Gene Summary for negative effect on outcome", background = "black",
-                            tableOutput("table2"))
+                            tableOutput(ns("table2")))
                     )
             ),
             
             tabItem(tabName = ns("mcodata"),
                     fluidRow(
-                        uiOutput("col"),
+                        uiOutput(ns("col")),
                         box(title = "Mechanistic Model Gene Summary",width=12, background = "black",
-                            actionButton("goButton3", "Go!",icon = icon("play"),style="success"),
-                            tableOutput("table3")),
-                        selectInput("palette", "Choose Color Theme", c("YlOrRd", "RdYlBu", "Greens", "Blues")),
-                        d3heatmapOutput("heatmap",      width="90%",  height="1000px")
+                            actionButton(ns("goButton3"), "Go!",icon = icon("play"),style="success"),
+                            tableOutput(ns("table3"))),
+                        selectInput(ns("palette"), "Choose Color Theme", c("YlOrRd", "RdYlBu", "Greens", "Blues")),
+                        d3heatmapOutput(ns("heatmap"),      width="90%",  height="1000px")
                     )
             )
         )
@@ -795,7 +840,7 @@ nonlinearServer <- function(input, output, session) {
                          "idata" = "mcodata",
                          "mcodata" = "idata"
         )
-        updateTabItems(session, "tabs", newtab)
+        updateTabItems(session, ns("tabs"), newtab)
         global$p1=df1()$p1
         global$p2=df1()$p2
         global$GBM_data=df1()$GBM_data
@@ -809,7 +854,7 @@ nonlinearServer <- function(input, output, session) {
                          "idata" = "mcodata",
                          "mcodata" = "idata"
         )
-        updateTabItems(session, "tabs", newtab)
+        updateTabItems(session, ns("tabs"), newtab)
         global$p1=df()$p1
         global$p2=df()$p2
         global$GBM_data=df()$GBM_data
@@ -834,7 +879,7 @@ nonlinearServer <- function(input, output, session) {
                          "iintro" = "idata",
                          "idata" = "iintro"
         )
-        updateTabItems(session, "tabs", newtab)
+        updateTabItems(session, ns("tabs"), newtab)
     }
     
     )
@@ -843,7 +888,7 @@ nonlinearServer <- function(input, output, session) {
     
     output$col <- renderUI({
         
-        selectInput("gene", "Select the Gene",  global$cname)
+        selectInput(ns("gene"), "Select the Gene",  global$cname)
     })
     
     
