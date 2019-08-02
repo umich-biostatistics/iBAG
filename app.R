@@ -340,7 +340,7 @@ linearServer <- function(input, output, session) {
 
     output$col <- renderUI({
 
-        selectInput(ns("gene"), "Select the Gene",  colnames(df()$GBM_data$OurMRNA))
+        selectInput("gene", "Select the Gene",  colnames(df()$GBM_data$OurMRNA))
     })
 
     output$plot1 <- renderPlot({
