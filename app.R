@@ -33,7 +33,7 @@ linearUI <- function(id, label = "linear") {
     
     header_linear <- dashboardHeader(
         
-        title = "Intergrative Bayesian analysis of multi-platform genomics data",
+        title = "Linear iBag",
         titleWidth = 700
     )
     
@@ -461,7 +461,7 @@ nonlinearUI <- function(id, label = "nonlinear") {
     
     header_nonlinear <- dashboardHeader(
         
-        title = "Intergrative Bayesian analysis of multi-platform genomics data",
+        title = "Nonlinear iBag",
         titleWidth = 700
     )
     
@@ -1059,6 +1059,96 @@ radioServer <- function(input, output, session) {
 
 
 
+
+piUI <- function(id, label = "pi") {
+    ns <- NS(id)
+    
+    header_radio <- dashboardHeader(
+        title = "piBAG" #, 
+        # titleWidth = 700
+    )
+    
+    sidebar_radio <- dashboardSidebar(
+        width = 200,
+        sidebarMenu(
+            id="tabs",
+            menuItem("Introduction", tabName = "iintro", icon = icon("upload", lib = "glyphicon")),
+            menuItem("Data Input", tabName = "idata", icon = icon("upload", lib = "glyphicon")),
+            menuItem("Mechanistic Model Fits", tabName = "mcodata", icon = icon("stats", lib = "glyphicon")),
+            menuItem("Posterior Probability Plots", tabName = "rdata", icon = icon("stats", lib = "glyphicon")),
+            menuItem("Gene Tables", tabName = "gdata", icon = icon("th", lib = "glyphicon"))
+        )
+    )
+    
+    body_radio <- dashboardBody(
+        #h2("Hello, World!")
+        tabItems(
+            
+            tabItem(tabName = "iintro",
+                    
+                    fluidRow(img(src='ibag.png',align="left"),
+                             
+                             p("iBAG is short for integrative Bayesian analysis of high-dimensional multiplatform genomics data. iBAG is a general framework for integrating information across genomic, transcriptomic and epigenetic data. Briefly, iBAG uses a novel hierarchical procedure by breaking the modeling into two parts, a mechanistic component that clarifies the molecular behaviors, mechanisms and relationships between and within the different types of molecular platforms. Subsequently, a clinical component that utilizes this information to assess associations between the phenotypes and clinical outcomes that characterize cancer development and progression (e.g. survival times, treatment arms, response to chemotherapy and tumor [sub]-types). The  Figure shows a schematic representation of the iBAG modeling strategy. The statistical formulation of the iBAG models can be found",a('here', href='http://www.ncbi.nlm.nih.gov/pubmed/23142963'),"and", a('here', href='http://www.ncbi.nlm.nih.gov/pubmed/24053265'),". A standalone version of this code along with an example dataset is available at" , a('here', href='http://odin.mdacc.tmc.edu/~vbaladan/Veera_Home_Page/iBAG.zip'),"."),
+                             box(title = "Input Data", status = "primary",width = 4, background = "black", "If you understand the data format to input for the app click the button to proceed", actionButton("inButton", "Input data for iBAG",icon = icon("play"),style="success"))
+                             
+                    )
+            ))
+    )
+    
+    dashboardPage(skin = "blue", header_radio, sidebar_radio, body_radio)
+    
+}
+
+piServer <- function(input, output, session) {
+    
+}
+
+
+functionalUI <- function(id, label = "functional") {
+    ns <- NS(id)
+    
+    header_radio <- dashboardHeader(
+        title = "Functional iBAG" #, 
+        # titleWidth = 700
+    )
+    
+    sidebar_radio <- dashboardSidebar(
+        width = 200,
+        sidebarMenu(
+            id="tabs",
+            menuItem("Introduction", tabName = "iintro", icon = icon("upload", lib = "glyphicon")),
+            menuItem("Data Input", tabName = "idata", icon = icon("upload", lib = "glyphicon")),
+            menuItem("Mechanistic Model Fits", tabName = "mcodata", icon = icon("stats", lib = "glyphicon")),
+            menuItem("Posterior Probability Plots", tabName = "rdata", icon = icon("stats", lib = "glyphicon")),
+            menuItem("Gene Tables", tabName = "gdata", icon = icon("th", lib = "glyphicon"))
+        )
+    )
+    
+    body_radio <- dashboardBody(
+        #h2("Hello, World!")
+        tabItems(
+            
+            tabItem(tabName = "iintro",
+                    
+                    fluidRow(img(src='ibag.png',align="left"),
+                             
+                             p("iBAG is short for integrative Bayesian analysis of high-dimensional multiplatform genomics data. iBAG is a general framework for integrating information across genomic, transcriptomic and epigenetic data. Briefly, iBAG uses a novel hierarchical procedure by breaking the modeling into two parts, a mechanistic component that clarifies the molecular behaviors, mechanisms and relationships between and within the different types of molecular platforms. Subsequently, a clinical component that utilizes this information to assess associations between the phenotypes and clinical outcomes that characterize cancer development and progression (e.g. survival times, treatment arms, response to chemotherapy and tumor [sub]-types). The  Figure shows a schematic representation of the iBAG modeling strategy. The statistical formulation of the iBAG models can be found",a('here', href='http://www.ncbi.nlm.nih.gov/pubmed/23142963'),"and", a('here', href='http://www.ncbi.nlm.nih.gov/pubmed/24053265'),". A standalone version of this code along with an example dataset is available at" , a('here', href='http://odin.mdacc.tmc.edu/~vbaladan/Veera_Home_Page/iBAG.zip'),"."),
+                             box(title = "Input Data", status = "primary",width = 4, background = "black", "If you understand the data format to input for the app click the button to proceed", actionButton("inButton", "Input data for iBAG",icon = icon("play"),style="success"))
+                             
+                    )
+            ))
+    )
+    
+    dashboardPage(skin = "blue", header_radio, sidebar_radio, body_radio)
+    
+}
+
+functionalServer <- function(input, output, session) {
+    
+}
+
+
+
 # Define UI for application that draws a histogram
 ui <- dashboardPage(
     # Header of the page
@@ -1083,6 +1173,10 @@ ui <- dashboardPage(
             menuItem("Non-linear iBag", icon = icon("th"), tabName = "input-nonlinear",
                      badgeLabel = "new", badgeColor = "green"),
             menuItem("Radio iBag", icon = icon("th"), tabName = "input-radio",
+                     badgeLabel = "new", badgeColor = "green"),
+            menuItem("piBag", icon = icon("th"), tabName = "input-pi",
+                     badgeLabel = "new", badgeColor = "green"),
+            menuItem("Functional iBag", icon = icon("th"), tabName = "input-functional",
                      badgeLabel = "new", badgeColor = "green")
         )
 
@@ -1111,11 +1205,31 @@ ui <- dashboardPage(
             # Radio iBAG tab -------------------------------------------------
             tabItem(tabName = "input-radio",
                 radioUI("radio1", "radio 1")
+            ), 
+            
+            # piBAG tab -------------------------------------------------
+            tabItem(tabName = "input-pi",
+                    piUI("pi1", "pi 1")
+            ), 
+            
+            # Functional iBAG tab -------------------------------------------------
+            tabItem(tabName = "input-functional",
+                    functionalUI("functional1", "functional 1")
             )
             
             
-        )
+        ),
         
+        # Removes the white space at the bottom of the page that results from removing the header 
+        tags$script('window.onload = function() {
+            function fixBodyHeight() {
+            var el = $(document.getElementsByClassName("content-wrapper")[0]);
+            var h = el.height();
+            el.css("min-height", h + 50 + "px");
+        };
+        window.addEventListener("resize", fixBodyHeight);
+        fixBodyHeight();
+        };')
 
     )
 )
@@ -1130,6 +1244,8 @@ server <- function(input, output, session) {
     callModule(linearServer, "linear1")
     callModule(nonlinearServer, "nonlinear1")
     callModule(radioServer, "radio1")
+    callModule(piServer, "pi1")
+    callModule(functionalServer, "functional1")
     
 }
 
