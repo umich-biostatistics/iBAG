@@ -262,11 +262,11 @@ linearServer <- function(input, output, session) {
     )
 
     observeEvent(input$inButton, {
-        newtab <- switch(input$tabs,
-                         "iintro" = "idata",
-                         "idata" = "iintro"
-        )
-        updateTabItems(session, "tabs", newtab)
+        # newtab <- switch(input$tabs,
+        #                  "iintro" = "idata",
+        #                  "idata" = "iintro"
+        # )
+        # updateTabItems(session, "tabs", newtab)
     }
 
     )
@@ -851,11 +851,11 @@ nonlinearServer <- function(input, output, session) {
     
     
     observeEvent(input$goButton1, {
-        newtab <- switch(input$tabs,
-                         "idata" = "mcodata",
-                         "mcodata" = "idata"
-        )
-        updateTabItems(session, ns("tabs"), newtab)
+        # newtab <- switch(input$tabs,
+        #                  "idata" = "mcodata",
+        #                  "mcodata" = "idata"
+        # )
+        # updateTabItems(session, ns("tabs"), newtab)
         global$p1=df1()$p1
         global$p2=df1()$p2
         global$GBM_data=df1()$GBM_data
@@ -865,11 +865,11 @@ nonlinearServer <- function(input, output, session) {
     )
     
     observeEvent(input$goButton2, {
-        newtab <- switch(input$tabs,
-                         "idata" = "mcodata",
-                         "mcodata" = "idata"
-        )
-        updateTabItems(session, ns("tabs"), newtab)
+        # newtab <- switch(input$tabs,
+        #                  "idata" = "mcodata",
+        #                  "mcodata" = "idata"
+        # )
+        # updateTabItems(session, ns("tabs"), newtab)
         global$p1=df()$p1
         global$p2=df()$p2
         global$GBM_data=df()$GBM_data
@@ -890,11 +890,11 @@ nonlinearServer <- function(input, output, session) {
     
     
     observeEvent(input$inButton, {
-        newtab <- switch(input$tabs,
-                         "iintro" = "idata",
-                         "idata" = "iintro"
-        )
-        updateTabItems(session, ns("tabs"), newtab)
+        # newtab <- switch(input$tabs,
+        #                  "iintro" = "idata",
+        #                  "idata" = "iintro"
+        # )
+        # updateTabItems(session, ns("tabs"), newtab)
     }
     
     )
