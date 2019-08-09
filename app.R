@@ -131,18 +131,21 @@ linearUI <- function(id, label = "linear") {
                         box(title = "Input multi-platform Genomics Data", status = "primary", solidHeader = TRUE, width=6,
                             checkboxInput(ns("cn"), label = "Copy Number"),
                             conditionalPanel(
-                                condition = paste0("input.",ns("cn"),"==true"), # "input.cn==true"
+                                condition = "input.cn==true", 
+                                ns = ns,
                                 fileInput(ns('cnfile'), 'Input Copy Number Data File')
                             ),
                             
                             checkboxInput(ns("meth"), label = "DNA Methylation"),
                             conditionalPanel(
-                                condition = paste0("input.",ns("meth"),"==true"), # "input.meth==true"
+                                condition = "input.meth==true",
+                                ns = ns,
                                 fileInput(ns('methfile'), 'Input DNA Methylation Data File')
                             ),
                             checkboxInput(ns("mrna"), label = "MRNA Expression"),
                             conditionalPanel(
-                                condition = paste0("input.",ns("mrna"),"==true"), # "input.mrna==true"
+                                condition = "input.mrna==true",
+                                ns = ns,
                                 fileInput(ns('mrnafile'), 'Input mRNA Expression Data File')
                             )),
                         
@@ -151,7 +154,8 @@ linearUI <- function(id, label = "linear") {
                                         choices = list("None"=0,"Continuous" = 2,
                                                        "Survival (Uncensored)" = 3),selected=0),
                             conditionalPanel(
-                                condition = paste0("input.",ns("rdata"),">0"), # "input.rdata>0"
+                                condition = "input.rdata>0", 
+                                ns = ns,
                                 fileInput(ns('rfile'), paste("Input clinical data file"))
                             ))),
                     
@@ -559,18 +563,21 @@ nonlinearUI <- function(id, label = "nonlinear") {
                         box(title = "Input multi-platform Genomics Data", status = "primary", solidHeader = TRUE, width=6,
                             checkboxInput(ns("cn"), label = "Copy Number"),
                             conditionalPanel(
-                                condition = paste0("input.",ns("cn"),"==true"), # "input.cn==true"
+                                condition = "input.cn==true", 
+                                ns = ns,
                                 fileInput(ns('cnfile'), 'Input Copy Number Data File')
                             ),
                             
                             checkboxInput(ns("meth"), label = "DNA Methylation"),
                             conditionalPanel(
-                                condition = paste0("input.",ns("meth"),"==true"), # "input.meth==true"
+                                condition = "input.meth==true", 
+                                ns = ns,
                                 fileInput(ns('methfile'), 'Input DNA Methylation Data File')
                             ),
                             checkboxInput(ns("mrna"), label = "MRNA Expression"),
                             conditionalPanel(
-                                condition = paste0("input.",ns("mrna"),"==true"), # "input.mrna==true"
+                                condition = "input.mrna==true", 
+                                ns = ns,
                                 fileInput(ns('mrnafile'), 'Input mRNA Expression Data File')
                             )),
                         
@@ -579,7 +586,8 @@ nonlinearUI <- function(id, label = "nonlinear") {
                                         choices = list("None"=0,"Continuous" = 2,
                                                        "Survival (Uncensored)" = 3),selected=0),
                             conditionalPanel(
-                                condition = paste0("input.",ns("rdata"),">0"), # "input.rdata>0"
+                                condition = "input.rdata>0", 
+                                ns = ns,
                                 fileInput(ns('rfile'), paste("Input clinical data file"))
                             ))),
                     
