@@ -1,11 +1,14 @@
-
-#install.packages('rJava', type='binary')
+###########################################################################################################################
+####### Please download "Java SE Development Kit 11.0.1" from https://www.oracle.com/technetwork/java/javase/downloads/java-archive-javase11-5116896.html first.###
+################################################################################################################################3
+packages=c("shiny","ggplot2","shinydashboard","shinythemes","d3heatmap","rJava","bartMachine")
+install.packages(packages)
 library(shiny)
 library(ggplot2)
 library(shinydashboard)
 library(shinythemes)
 library(d3heatmap)
-#options(java.parameters = "-Xmx5g")
+#options(java.parameters = "-Xmx5g") #set 5g memory
 library(rJava)
 library(bartMachine)
 source("func.R")
