@@ -350,8 +350,8 @@ linearServer <- function(input, output, session) {
     })
 
     output$col <- renderUI({
-
-        selectInput("gene", "Select the Gene",  colnames(df()$GBM_data$OurMRNA))
+        ns <- session$ns
+        selectInput(ns("gene"), "Select the Gene",  colnames(df()$GBM_data$OurMRNA))
     })
 
     output$plot1 <- renderPlot({
@@ -902,7 +902,7 @@ nonlinearServer <- function(input, output, session) {
     
     
     output$col <- renderUI({
-        
+        ns <- session$ns
         selectInput(ns("gene"), "Select the Gene",  global$cname)
     })
     
