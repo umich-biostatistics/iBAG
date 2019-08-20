@@ -1184,15 +1184,15 @@ ui <- dashboardPage(
         sidebarMenu(
             menuItem("iBag Introduction", tabName = "intro", icon = icon("dashboard")),
             menuItem("Linear iBag", icon = icon("th"), tabName = "input-linear",
-                     badgeLabel = "new", badgeColor = "green"),
+                     ),
             menuItem("Non-linear iBag", icon = icon("th"), tabName = "input-nonlinear",
-                     badgeLabel = "new", badgeColor = "green"),
+                     ),
             menuItem("Radio iBag", icon = icon("th"), tabName = "input-radio",
-                     badgeLabel = "new", badgeColor = "green"),
+                     ),
             menuItem("piBag", icon = icon("th"), tabName = "input-pi",
-                     badgeLabel = "new", badgeColor = "green"),
+                     ),
             menuItem("Functional iBag", icon = icon("th"), tabName = "input-functional",
-                     badgeLabel = "new", badgeColor = "green")
+                     )
         )
 
     ),
