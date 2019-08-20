@@ -1183,15 +1183,15 @@ ui <- dashboardPage(
         
         sidebarMenu(
             menuItem("iBag Introduction", tabName = "intro", icon = icon("dashboard")),
-            menuItem("Linear iBag", icon = icon("th"), tabName = "input-linear",
+            menuItem("Linear iBag", icon = icon("th"), tabName = "input-linear"
                      ),
-            menuItem("Non-linear iBag", icon = icon("th"), tabName = "input-nonlinear",
+            menuItem("Non-linear iBag", icon = icon("th"), tabName = "input-nonlinear"
                      ),
-            menuItem("Radio iBag", icon = icon("th"), tabName = "input-radio",
+            menuItem("Radio iBag", icon = icon("th"), tabName = "input-radio"
                      ),
-            menuItem("piBag", icon = icon("th"), tabName = "input-pi",
+            menuItem("piBag", icon = icon("th"), tabName = "input-pi"
                      ),
-            menuItem("Functional iBag", icon = icon("th"), tabName = "input-functional",
+            menuItem("Functional iBag", icon = icon("th"), tabName = "input-functional"
                      )
         )
 
