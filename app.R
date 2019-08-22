@@ -613,7 +613,7 @@ nonlinearUI <- function(id, label = "nonlinear") {
                     sliderInput(ns("delta"), "Delta:",
                                 min = 0, max = 0.5, value = 0.01, step= 0.001),
                     plotOutput(ns("plot1"))
-                    )
+                    
             ),
             tabItem(tabName = ns("gdata"),
                     fluidRow(
@@ -638,7 +638,7 @@ nonlinearUI <- function(id, label = "nonlinear") {
         
         
         
-    )
+    
     
     
     
