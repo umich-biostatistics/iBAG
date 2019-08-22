@@ -592,7 +592,7 @@ nonlinearUI <- function(id, label = "nonlinear") {
                             ))),
                     
                     sliderInput(ns("mruns"), "Number of MCMC Runs (Burn in is 5% of runs) (Calibrate the number of runs according to the computer it is being run on) :",
-                                min = 10, max = 10000, value = 10, step= 100),
+                                min = 100, max = 10000, value = 100, step= 100),
                     
                     fluidRow(
                         box(title = "Input Data summary", status = "primary",width = 4, background = "black",
@@ -600,9 +600,8 @@ nonlinearUI <- function(id, label = "nonlinear") {
                         
                         
                         box(title = "Run Analysis", status = "primary",width = 4, background = "black", "If you conform with the input data summary press the button to run the analysis", 
-                            actionButton(ns("goButton1"), "Run linear iBAG!",icon = icon("play"),style="success"), 
-                            actionButton(ns("goButton2"), "Run bart iBAG!",icon = icon("play"),style="success")),
-                        box(title="R square:", status = "primary",width = 4, background = "black",textOutput("rsq"))
+                             
+                            actionButton(ns("goButton2"), "Run nonlinear iBAG!",icon = icon("play"),style="success")))
                     )
                     
                     
@@ -613,15 +612,13 @@ nonlinearUI <- function(id, label = "nonlinear") {
             tabItem(tabName = ns("rdata"),
                     sliderInput(ns("delta"), "Delta:",
                                 min = 0, max = 0.5, value = 0.01, step= 0.001),
-                    plotOutput(ns("plot1")),
-                    plotOutput(ns("plot2"))
+                    plotOutput(ns("plot1"))
+                    )
             ),
             tabItem(tabName = ns("gdata"),
                     fluidRow(
-                        box(title = "Gene Summary for positive effect on outcome", background = "black",
-                            tableOutput(ns("table1"))),
-                        box(title = "Gene Summary for negative effect on outcome", background = "black",
-                            tableOutput(ns("table2")))
+                        box(title = "Gene Summary for effect on outcome", background = "black",
+                            tableOutput(ns("table1")))
                     )
             ),
             
@@ -676,193 +673,22 @@ nonlinearServer <- function(input, output, session) {
             p<-dim(GBM_data$OurMRNA)[2]
             
             oo <- matrix(nrow=3,ncol=p)
-            for (i in 1:(p-1)){ oo[,i] <- c(i,i+p,i+2*p+1) }
-            m_c= bartMachine(X=data.frame(to_gibbs$X), y=to_gibbs$Y,num_trees = 100)
+            for (i in 1:p){ oo[,i] <- c(i,i+p,i+2*p) }
+            m_c= bartMachine(X=data.frame(to_gibbs$X), y=to_gibbs$Y,num_trees = 100,num_burn_in = 0.05*nruns,num_iterations_after_burn_in =0.95*nruns)
             var_imp=investigate_var_importance(m_c, num_replicates_for_avg = 20)
-            rsq=m_c$PseudoRsq
-            delta<-input$delta
-            delta_star <- c( log(1-delta), log(1+delta) )
-            pos=var_imp$avg_var_props>delta_star[2]
-            neg=var_imp$avg_var_props<delta_star[1]
+           
             
             
             incProgress(6/10, message = paste("bart iBag Analysis for survival data Complete"))
             status<-"bart iBAG Analysis Complete"
             
-            
-            # pos <- apply(final$PARAM[-(1:burn_in),initial$beta_names],2,function(t) mean(t>delta_star[2]))
-            # neg <- apply(final$PARAM[-(1:burn_in),initial$beta_names],2,function(t) mean(t<delta_star[1]))
-            aname=colnames(GBM_data$X)
-            cname<- colnames(GBM_data$OurMRNA)
-            po<-aname%in%names(which(pos))
-            pgene<-which(po)
-            ne<-aname%in%names(which(neg))
-            ngene<-which(ne)
-            
-            p<-length(cname)
-            pgene1<-pgene[pgene<=p]
-            ngene1<-ngene[ngene<=p]
-            pgene2<-pgene[(pgene<=2*p) & (pgene>=p+1)]-p
-            ngene2<-ngene[(ngene<=2*p) & (ngene>=p+1)]-p
-            pgene3<-pgene[(pgene<=3*p) & (pgene>=2*p+1)]-2*p
-            ngene3<-ngene[(ngene<=3*p) & (ngene>=2*p+1)]-2*p
-            tmp<-array(0,dim=p)
-            tmp1<- tmp
-            tmp1[pgene1]<-1
-            tmp2<- tmp
-            tmp2[ pgene2 ]<-1
-            tmp3<- tmp
-            tmp3[ pgene3]<-1
-            
-            
-            t1<-data.frame(meth=tmp1,cnv=tmp2,other=tmp3,row.names = cname)
-            maxl<- max(colSums(t1))
-            v1<-array("",dim=c(maxl,3))
-            c1<-cname[which(t1$meth>0)]
-            if(length(c1)>0) v1[1:length(c1),1]<-c1
-            c2<-cname[which(t1$cnv>0)]
-            if(length(c2)>0) v1[1:length(c2),2]<-c2
-            c3<-cname[which(t1$other>0)]
-            if(length(c3)>0) v1[1:length(c3),3]<-c3
-            colnames(v1)<-c("Methylation","Copy Number", "Other")
-            
-            tmp1<- tmp
-            tmp1[ngene1]<-1
-            tmp2<- tmp
-            tmp2[ ngene2 ]<-1
-            tmp3<- tmp
-            tmp3[ ngene3]<-1
-            
-            
-            t2<-data.frame(meth=tmp1,cnv=tmp2,other=tmp3,row.names = cname)
-            maxl<- max(colSums(t2))
-            v2<-array("",dim=c(maxl,3))
-            c1<-cname[which(t2$meth>0)]
-            if(length(c1)>0) v2[1:length(c1),1]<-c1
-            c2<-cname[which(t2$cnv>0)]
-            if(length(c2)>0) v2[1:length(c2),2]<-c2
-            c3<-cname[which(t2$other>0)]
-            if(length(c3)>0) v2[1:length(c3),3]<-c3
-            colnames(v2)<-c("Methylation","Copy Number", "Other")
-            
-            #aa<-data.frame(x=1:length(initial$beta_names),y=pos[oo],g=c(rep(1,to_gibbs$p[1]),rep(2,to_gibbs$p[2]),rep(3,to_gibbs$p[3]))[oo])
-            aa<-data.frame(x=1:length(cname),y=var_imp$avg_var_props[aname][oo],g=c(rep(1,to_gibbs$p[1]),rep(2,to_gibbs$p[2]),rep(3,to_gibbs$p[3]))[oo])
-            p1<-ggplot()+geom_bar(aes(x=x,y=y,fill = as.factor(g)), position = "dodge", stat="identity",data=aa)+scale_fill_discrete(labels=c("Methylation","Copy Number","Other"))+scale_x_continuous(breaks=c(seq(1,144,by=3)), labels=c(colnames(GBM_data$OurMRNA))  )+theme(axis.text.x = element_text(angle=90))+geom_hline(aes(yintercept=delta_star[2]))+theme(legend.title=element_blank())+ylab("Posterior Inclusion Proportion that > log(1+delta))")+ggtitle("Variable Importance")+xlab("Genes")
-            
-            
-            p2<-NULL
         })
-        return(list(to_gibbs=to_gibbs,GBM_data=GBM_data,oo=oo,status=status,burn_in=burn_in,p1=p1,p2=p2,t1=v1,t2=v2,rsq=rsq))
+        return(list(to_gibbs=to_gibbs,GBM_data=GBM_data,oo=oo,status=status,burn_in=burn_in,var_imp=var_imp))
         
         
     })
     
-    df1<-eventReactive(input$goButton1, {
-        
-        withProgress(message = 'Fitting Mechanistic Model', value = 1/10, {
-            nruns<-input$mruns
-            GBM_data <- mechmodel(methdata()$data,mrnadata()$data,cndata()$data,rdata()$data)
-            incProgress(1/10, message = paste("Fitting Clinical Model"))
-            to_gibbs <- prep_and_get_dims(X=GBM_data$X,clinical_response = GBM_data$OurSurvival,  take_log=TRUE, GBM=TRUE)
-            incProgress(1/10, detail = paste("Initializing MCMC"))
-            initial <- get_starting_values_NG(S=nruns, p=to_gibbs$p, k=to_gibbs$k, n=to_gibbs$n, X=to_gibbs$X, Y=to_gibbs$Y,names_to_keep = to_gibbs$names_to_keep)
-            incProgress(1/10, detail = paste("Running MCMC"))
-            M <- mean(coef(lm(to_gibbs$Y~to_gibbs$X - 1))^2)	#b_tilde=M per Griffin & Brown (2009)
-            final <- MC_samples_NG_no_sig_sq_in_beta_prior(PARAM=initial$PARAM, X=to_gibbs$X, Y=to_gibbs$Y, p=to_gibbs$p, k=to_gibbs$k, n=to_gibbs$n,a=0.001, b=0.001, c=1, a_tilde=2, b_tilde=M, tune=0.6, beta_names=initial$beta_names,gam_n2_names=initial$gam_n2_names, lam_names=initial$lam_names, psi_names=initial$psi_names)
-            
-            burn_in <- floor(0.05*nruns)+1
-            post_means <- apply(final$PARAM[(burn_in+1):nrow(final$PARAM),],2,mean)
-            
-            n<-dim(GBM_data$OurMRNA)[1]
-            p<-dim(GBM_data$OurMRNA)[2]
-            
-            oo <- matrix(nrow=3,ncol=p)
-            for (i in 1:(p-1)){ oo[,i] <- c(i,i+p,i+2*p+1) }
-            incProgress(6/10, message = paste("linear iBag Analysis Complete"))
-            status<-"linear iBAG Analysis Complete"
-            delta<-input$delta
-            delta_star <- c( log(1-delta), log(1+delta) )
-            pos <- apply(final$PARAM[-(1:burn_in),initial$beta_names],2,function(t) mean(t>delta_star[2]))
-            neg <- apply(final$PARAM[-(1:burn_in),initial$beta_names],2,function(t) mean(t<delta_star[1]))
-            pgene<-which(pos>0.5)
-            ngene<-which(neg>0.5)
-            cname<- colnames(GBM_data$OurMRNA)
-            p<-length(cname)
-            pgene1<-pgene[pgene<=p]
-            ngene1<-ngene[ngene<=p]
-            pgene2<-pgene[(pgene<=2*p) & (pgene>=p+1)]-p
-            ngene2<-ngene[(ngene<=2*p) & (ngene>=p+1)]-p
-            pgene3<-pgene[(pgene<=3*p) & (pgene>=2*p+1)]-2*p
-            ngene3<-ngene[(ngene<=3*p) & (ngene>=2*p+1)]-2*p
-            tmp<-array(0,dim=p)
-            tmp1<- tmp
-            tmp1[pgene1]<-1
-            tmp2<- tmp
-            tmp2[ pgene2 ]<-1
-            tmp3<- tmp
-            tmp3[ pgene3]<-1
-            
-            
-            t1<-data.frame(meth=tmp1,cnv=tmp2,other=tmp3,row.names = cname)
-            maxl<- max(colSums(t1))
-            v1<-array("",dim=c(maxl,3))
-            c1<-cname[which(t1$meth>0)]
-            if(length(c1)>0) v1[1:length(c1),1]<-c1
-            c2<-cname[which(t1$cnv>0)]
-            if(length(c2)>0) v1[1:length(c2),2]<-c2
-            c3<-cname[which(t1$other>0)]
-            if(length(c3)>0) v1[1:length(c3),3]<-c3
-            colnames(v1)<-c("Methylation","Copy Number", "Other")
-            
-            tmp1<- tmp
-            tmp1[ngene1]<-1
-            tmp2<- tmp
-            tmp2[ ngene2 ]<-1
-            tmp3<- tmp
-            tmp3[ ngene3]<-1
-            
-            
-            t2<-data.frame(meth=tmp1,cnv=tmp2,other=tmp3,row.names = cname)
-            maxl<- max(colSums(t2))
-            v2<-array("",dim=c(maxl,3))
-            c1<-cname[which(t2$meth>0)]
-            if(length(c1)>0) v2[1:length(c1),1]<-c1
-            c2<-cname[which(t2$cnv>0)]
-            if(length(c2)>0) v2[1:length(c2),2]<-c2
-            c3<-cname[which(t2$other>0)]
-            if(length(c3)>0) v2[1:length(c3),3]<-c3
-            colnames(v2)<-c("Methylation","Copy Number", "Other")
-            
-            aa<-data.frame(x=1:length(initial$beta_names),y=pos[oo],g=c(rep(1,to_gibbs$p[1]),rep(2,to_gibbs$p[2]),rep(3,to_gibbs$p[3]))[oo])
-            p1<-ggplot()+geom_bar(aes(x=x,y=y,fill = as.factor(g)), position = "dodge", stat="identity",data=aa)+scale_fill_discrete(labels=c("Methylation","Copy Number","Other"))+scale_x_continuous(breaks=c(seq(1,144,by=3)), labels=c(colnames(GBM_data$OurMRNA))  )+theme(axis.text.x = element_text(angle=90))+geom_hline(aes(yintercept=0.5))+theme(legend.title=element_blank())+ylab("Pr(beta > log(1+delta))")+ggtitle("Posterior Probabilities (Positive)")+xlab("Genes")
-            
-            
-            
-            aa<-data.frame(x=1:length(initial$beta_names),y=neg[oo],g=c(rep(1,to_gibbs$p[1]),rep(2,to_gibbs$p[2]),rep(3,to_gibbs$p[3]))[oo])
-            p2<-ggplot()+geom_bar(aes(x=x,y=y,fill = as.factor(g)), position = "dodge", stat="identity",data=aa)+scale_fill_discrete(labels=c("Methylation","Copy Number","Other"))+scale_x_continuous(breaks=c(seq(1,144,by=3)), labels=c(colnames(GBM_data$OurMRNA))  )+theme(axis.text.x = element_text(angle=90))+geom_hline(aes(yintercept=0.5))+theme(legend.title=element_blank())+ylab("Pr(beta > log(1-delta))")+ggtitle("Posterior Probabilities (Negative)")+xlab("Genes")
-            
-        })
-        return(list(to_gibbs=to_gibbs,GBM_data=GBM_data,oo=oo,final=final,initial=initial,status=status,burn_in=burn_in,p1=p1,p2=p2,t1=v1,t2=v2))
-        
-        
-    })
-    
-    
-    
-    
-    observeEvent(input$goButton1, {
-        # newtab <- switch(input$tabs,
-        #                  "idata" = "mcodata",
-        #                  "mcodata" = "idata"
-        # )
-        # updateTabItems(session, ns("tabs"), newtab)
-        global$p1=df1()$p1
-        global$p2=df1()$p2
-        global$GBM_data=df1()$GBM_data
-        global$cname=colnames(df1()$GBM_data$OurMRNA)
-    }
-    
-    )
+
     
     observeEvent(input$goButton2, {
         # newtab <- switch(input$tabs,
@@ -871,7 +697,7 @@ nonlinearServer <- function(input, output, session) {
         # )
         # updateTabItems(session, ns("tabs"), newtab)
         global$p1=df()$p1
-        global$p2=df()$p2
+       
         global$GBM_data=df()$GBM_data
         global$cname=colnames(df()$GBM_data$OurMRNA)
     }
@@ -899,6 +725,59 @@ nonlinearServer <- function(input, output, session) {
     
     )
     
+      
+  plotdata<-reactive({
+    
+    oo<-df()$oo
+    burn_in=df()$burn_in
+    to_gibbs=df()$to_gibbs
+    GBM_data=df()$GBM_data
+    var_imp=df()$var_imp
+    
+    
+    delta<-input$delta
+    pos=var_imp$avg_var_props>delta
+    
+    aname=colnames(GBM_data$X)
+    cname<- colnames(GBM_data$OurMRNA)
+    po<-aname%in%names(which(pos))
+    pgene<-which(po)
+    
+    
+    p<-length(cname)
+    pgene1<-pgene[pgene<=p]
+    
+    pgene2<-pgene[(pgene<=2*p) & (pgene>=p+1)]-p
+    
+    pgene3<-pgene[(pgene<=3*p) & (pgene>=2*p+1)]-2*p
+    
+    tmp<-array(0,dim=p)
+    tmp1<- tmp
+    tmp1[pgene1]<-1
+    tmp2<- tmp
+    tmp2[ pgene2 ]<-1
+    tmp3<- tmp
+    tmp3[ pgene3]<-1
+    
+    
+    t1<-data.frame(meth=tmp1,cnv=tmp2,other=tmp3,row.names = cname)
+    maxl<- max(colSums(t1))
+    v1<-array("",dim=c(maxl,3))
+    c1<-cname[which(t1$meth>0)]
+    if(length(c1)>0) v1[1:length(c1),1]<-c1
+    c2<-cname[which(t1$cnv>0)]
+    if(length(c2)>0) v1[1:length(c2),2]<-c2
+    c3<-cname[which(t1$other>0)]
+    if(length(c3)>0) v1[1:length(c3),3]<-c3
+    colnames(v1)<-c("Methylation","Copy Number", "Other")
+
+    
+    #aa<-data.frame(x=1:length(initial$beta_names),y=pos[oo],g=c(rep(1,to_gibbs$p[1]),rep(2,to_gibbs$p[2]),rep(3,to_gibbs$p[3]))[oo])
+    aa<-data.frame(x=1:length(cname),y=var_imp$avg_var_props[aname][oo],g=c(rep(1,to_gibbs$p[1]),rep(2,to_gibbs$p[2]),rep(3,to_gibbs$p[3]))[oo])
+    p1<-ggplot()+geom_bar(aes(x=x,y=y,fill = as.factor(g)), position = "dodge", stat="identity",data=aa)+scale_fill_discrete(labels=c("Methylation","Copy Number","Other"))+scale_x_continuous(breaks=c(seq(1,length(aname),by=3)), labels=c(colnames(GBM_data$OurMRNA))  )+theme(axis.text.x = element_text(angle=90))+geom_hline(aes(yintercept=delta))+theme(legend.title=element_blank())+ylab("Posterior Inclusion Proportion that > delta")+ggtitle("Variable Importance")+xlab("Genes")
+    return(list(p1=p1,t1=v1))
+  })
+    
     
     
     output$col <- renderUI({
@@ -907,25 +786,16 @@ nonlinearServer <- function(input, output, session) {
     })
     
     
-    output$rsq<-renderText({
-        df()$rsq
-    })
+    
     
     output$plot1 <- renderPlot({
         
-        global$p1
+        plotdata()$p1
         
         
     })
     
-    
-    
-    output$plot2 <- renderPlot({
-        
-        
-        global$p2
-        
-    })
+
     
     
     
@@ -939,14 +809,11 @@ nonlinearServer <- function(input, output, session) {
     
     
     output$table1 = renderTable({
-        df()$t1
+        plotdata()$t1
     },
     include.rownames=FALSE)
     
-    output$table2 = renderTable({
-        df()$t2
-    },
-    include.rownames=FALSE)
+    
     
     
     output$table3 = renderTable({
@@ -975,7 +842,9 @@ nonlinearServer <- function(input, output, session) {
     methdata<-reactive({
         methfile <- input$methfile
         if (is.null(methfile)){
-            return(NULL)
+            mdata<-read.csv("methylationdata.csv")
+      tb=data.frame("Data Type"="Methylation", p=dim(mdata)[2],n=dim(mdata)[1],row.names = NULL)
+      return(list(tb=tb,data=mdata))
         }else{
             mdata<-read.csv(methfile$datapath)
             tb=data.frame("Data Type"="Methylation", p=dim(mdata)[2],n=dim(mdata)[1],row.names = NULL)
@@ -987,7 +856,9 @@ nonlinearServer <- function(input, output, session) {
     cndata<-reactive({
         cnfile <- input$cnfile
         if (is.null(cnfile)){
-            return(NULL)
+             mdata<-read.csv("copynumberdata.csv")
+      tb=data.frame("Data Type"="Copy Number", p=dim(mdata)[2],n=dim(mdata)[1],row.names = NULL)
+      return(list(tb=tb,data=mdata))
         }else{
             mdata<-read.csv(cnfile$datapath)
             tb=data.frame("Data Type"="Copy Number", p=dim(mdata)[2],n=dim(mdata)[1],row.names = NULL)
@@ -999,7 +870,9 @@ nonlinearServer <- function(input, output, session) {
     mrnadata<-reactive({
         mrnafile <- input$mrnafile
         if (is.null(mrnafile)){
-            return(NULL)
+            mdata<-read.csv("mrnadata.csv")
+      tb=data.frame("Data Type"="mRNA", p=dim(mdata)[2],n=dim(mdata)[1],row.names = NULL)
+      return(list(tb=tb,data=mdata))
         }else{
             mdata<-read.csv(mrnafile$datapath)
             tb=data.frame("Data Type"="mRNA", p=dim(mdata)[2],n=dim(mdata)[1],row.names = NULL)
@@ -1011,7 +884,9 @@ nonlinearServer <- function(input, output, session) {
     rdata<-reactive({
         rfile <- input$rfile
         if (is.null(rfile)){
-            return(NULL)
+            mdata<-read.csv("survivaltimes.csv")
+      tb=data.frame("Data Type"="Response", p=dim(mdata)[2],n=dim(mdata)[1],row.names = NULL)
+      return(list(tb=tb,data=mdata))
         }else{
             mdata<-read.csv(rfile$datapath)
             tb=data.frame("Data Type"="Response", p=dim(mdata)[2],n=dim(mdata)[1],row.names = NULL)
