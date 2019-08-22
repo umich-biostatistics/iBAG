@@ -413,7 +413,9 @@ linearServer <- function(input, output, session) {
     methdata<-reactive({
         methfile <- input$methfile
         if (is.null(methfile)){
-            return(NULL)
+          mdata<-read.csv("methylationdata.csv")
+          tb=data.frame("Data Type"="Methylation", p=dim(mdata)[2],n=dim(mdata)[1],row.names = NULL)
+          return(list(tb=tb,data=mdata))
         }else{
             mdata<-read.csv(methfile$datapath)
             tb=data.frame("Data Type"="Methylation", p=dim(mdata)[2],n=dim(mdata)[1],row.names = NULL)
@@ -425,7 +427,9 @@ linearServer <- function(input, output, session) {
     cndata<-reactive({
         cnfile <- input$cnfile
         if (is.null(cnfile)){
-            return(NULL)
+          mdata<-read.csv("copynumberdata.csv")
+          tb=data.frame("Data Type"="Copy Number", p=dim(mdata)[2],n=dim(mdata)[1],row.names = NULL)
+          return(list(tb=tb,data=mdata))
         }else{
             mdata<-read.csv(cnfile$datapath)
             tb=data.frame("Data Type"="Copy Number", p=dim(mdata)[2],n=dim(mdata)[1],row.names = NULL)
@@ -437,7 +441,9 @@ linearServer <- function(input, output, session) {
     mrnadata<-reactive({
         mrnafile <- input$mrnafile
         if (is.null(mrnafile)){
-            return(NULL)
+          mdata<-read.csv("mrnadata.csv")
+          tb=data.frame("Data Type"="mRNA", p=dim(mdata)[2],n=dim(mdata)[1],row.names = NULL)
+          return(list(tb=tb,data=mdata))
         }else{
             mdata<-read.csv(mrnafile$datapath)
             tb=data.frame("Data Type"="mRNA", p=dim(mdata)[2],n=dim(mdata)[1],row.names = NULL)
@@ -449,7 +455,9 @@ linearServer <- function(input, output, session) {
     rdata<-reactive({
         rfile <- input$rfile
         if (is.null(rfile)){
-            return(NULL)
+          mdata<-read.csv("survivaltimes.csv")
+          tb=data.frame("Data Type"="Response", p=dim(mdata)[2],n=dim(mdata)[1],row.names = NULL)
+          return(list(tb=tb,data=mdata))
         }else{
             mdata<-read.csv(rfile$datapath)
             tb=data.frame("Data Type"="Response", p=dim(mdata)[2],n=dim(mdata)[1],row.names = NULL)
