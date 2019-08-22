@@ -602,7 +602,7 @@ nonlinearUI <- function(id, label = "nonlinear") {
                         box(title = "Run Analysis", status = "primary",width = 4, background = "black", "If you conform with the input data summary press the button to run the analysis", 
                              
                             actionButton(ns("goButton2"), "Run nonlinear iBAG!",icon = icon("play"),style="success")))
-                    )
+                    
                     
                     
                     
@@ -632,12 +632,12 @@ nonlinearUI <- function(id, label = "nonlinear") {
                         d3heatmapOutput(ns("heatmap"),      width="90%",  height="1000px")
                     )
             )
-        )
         
         
+        )  
         
         
-        
+    ) 
     
     
     
