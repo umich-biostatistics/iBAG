@@ -13,16 +13,9 @@ introduction_page <- tabItem(
   
   # Markdown document of Introductory contents
   #includeMarkdown("iBAG/markdown/introduction_markdown.Rmd")
-  includeMarkdown("markdown/introduction_markdown.Rmd"),
+  includeMarkdown("markdown/introduction_markdown.Rmd")
   
-  # Image below the Introduction Markdown content
-  column(
-    width = 12, 
-    offset = 1,
-    shiny::img(src = "iBAG_Modeling_Strategy.png",
-               width = 850,
-               height = 370)
-  )
+
   
 )
 
