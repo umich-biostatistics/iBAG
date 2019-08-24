@@ -7,11 +7,15 @@
 > + [`Linear iBAG`](https://github.com/umich-biostatistics): hierarchical integration Bayesian models according to theoretical or structural relationships among different platform  
 [[Wang et al](https://www.ncbi.nlm.nih.gov/pubmed/?term=ibag+baladandayuthapani), 
      [Jennigs et al](https://www.ncbi.nlm.nih.gov/pubmed/24053265)]
+     
 > + [`Non-linear iBAG`](https://github.com/umich-biostatistics):  integrative Bayesian additive regression modeling of multiplatform genomics data
+
 > + [`Radio iBAG`](https://github.com/umich-biostatistics):  radiographic imaging + multiplatform genomics  
 [Zhang et al (AOAS, in press) ]
+
 > + [`piBAG`](https://github.com/umich-biostatistics): iBAG + functional/pathway information  
 [Jennigs et al (submitted)]
+
 > + [`Functional iBAG`](https://github.com/umich-biostatistics): Proteomics-based integrative Bayesian analysis of multiplatform genomic data  
 [Chi et al (in preparation)]
 

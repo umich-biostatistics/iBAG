@@ -17,7 +17,7 @@ introduction_page <- tabItem(
   
   # Image below the Introduction Markdown content
   column(
-    width = 15, 
+    width = 12, 
     offset = 1,
     shiny::img(src = "iBAG_Modeling_Strategy.png",
                width = 850,
