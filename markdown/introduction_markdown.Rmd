@@ -1,4 +1,3 @@
-![](Presentation.png)  
 
 ###  ***iBAG*** is an R/Shiny application for integrative Bayesian analyses of genomics models
 
@@ -7,16 +6,26 @@
 ##### iBAG is short for integrative Bayesian analysis of high-dimensional multiplatform genomics data. iBAG is a general framework for integrating information across genomic, transcriptomic and epigenetic data. Briefly, iBAG uses a novel hierarchical procedure by breaking the modeling into two parts, a mechanistic component that clarifies the molecular behaviors, mechanisms and relationships between and within the different types of molecular platforms. Subsequently, a clinical component that utilizes this information to assess associations between the phenotypes and clinical outcomes that characterize cancer development and progression (e.g. survival times, treatment arms, response to chemotherapy and tumor [sub]-types). The figure below shows a schematic representation of the iBAG modeling strategy. The statistical formulation of the iBAG models can be found here and here. A standalone version of this code along with an example dataset is available here.
 
 #### There are five versions of iBAG for specific problems:
-> + [`Linear iBAG`](https://github.com/umich-biostatistics): insert description
-> + [`Non-linear iBAG`](https://github.com/umich-biostatistics):  insert description
-> + [`Radio iBAG`](https://github.com/umich-biostatistics):  radiographic imaging + multiplatform genomics
-> + [`piBAG`](https://github.com/umich-biostatistics): iBAG + functional/pathway information
-> + [`Functional iBAG`](https://github.com/umich-biostatistics): insert description
+> + [`Linear iBAG`](https://github.com/umich-biostatistics): Hierarchical integration Bayesian models according to theoretical or structural relationships among different platforms 
+  [[Wang et al](https://www.ncbi.nlm.nih.gov/pubmed/?term=ibag+baladandayuthapani), [Jennigs et al](https://www.ncbi.nlm.nih.gov/pubmed/24053265)]
+> + [`Non-linear iBAG`](https://github.com/umich-biostatistics):  Integrative Bayesian additive regression modeling of multiplatform genomics data 
+   [Chi et al (in preparation)]
+> + [`Radio iBAG`](https://github.com/umich-biostatistics):  : Radiomics-based integrative Bayesian analysis of multiplatform genomic data: radiographic imaging + multiplatform genomics   [Zhang et al (AOAS, in press) ]
+> + [`piBAG`](https://github.com/umich-biostatistics): Pathway-based integrative Bayesian modeling of multiplatform genomics data: iBAG + functional/pathway information 
+    [Jennigs et al (submitted)]
+> + [`Functional iBAG`](https://github.com/umich-biostatistics): Proteomics-based integrative Bayesian analysis of multiplatform genomic data
+   [Chi et al (in preparation)]
+
 
 #### This is the modeling strategy of iBAG:
 
+![](iBAG_Modeling_Strategy.png)  
 
-
+#### Acknowledgement
+  
+Veera Baladandayuthapani*, Correspondence, E-mail: <veerab@umich.edu> 
+  
+Wenting Wang, Elizabeth J. McGuffey, Youyi Zhang, Jeffrey S. Morris, Bradley M. Broom, Ganiraju Manyam and Kim-Anh Do , Raymond J. Carroll, Shivali Narang Aerry, Arvind U.K. Rao, Michael Kleinsasser , Sunyi Chi
 
 
 
