@@ -33,7 +33,8 @@ mechmodel<-function(meth,mrna,cnv,dsurv){
   rownames(X) <- barcode
   colnames(X) <- paste(rep(c("Meth","CN","Other"),each=p),rep(OurGenes,3),sep="_")
   for (i in 1:p) {
-    ind_meth <- grep(OurGenes[i],colnames(OurMeth))
+    #ind_meth <- grep(OurGenes[i],colnames(OurMeth)) #If aim to grep gene "AR", we will get id of "AR", "ARAF", "PARP1", "ADAR" and so on in this way.
+    ind_meth <-grep(paste("^",OurGenes[i],"$", sep=""),colnames(OurMeth))
     if (length(ind_meth)==0) scores_meth <- rep(0,n) else {
       if (length(ind_meth)==1) {
         scores_meth <- as.matrix(OurMeth[,ind_meth])
@@ -42,8 +43,10 @@ mechmodel<-function(meth,mrna,cnv,dsurv){
           num_scores_meth[i] <- which(cumsum(PCA_meth$sdev^2/sum(PCA_meth$sdev^2))>=0.9)[1]
           scores_meth  <- PCA_meth$scores[,1:num_scores_meth[i]]
         } }
+
     # ========
-    ind_CN   <- grep(OurGenes[i],colnames(OurCopyNumber))
+    #ind_CN   <- grep(OurGenes[i],colnames(OurCopyNumber))
+    ind_CN <-grep(paste("^",OurGenes[i],"$", sep=""),colnames(OurCopyNumber))
     if (length(ind_CN)==0) scores_CN <- rep(0,n) else {
       if (length(ind_CN)==1) {
         scores_CN <- OurCopyNumber[,ind_CN]
